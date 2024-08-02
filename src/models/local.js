@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
      nome: DataTypes.STRING,
      descricao: DataTypes.STRING,
      localidade: DataTypes.STRING,
-     coordenadas: DataTypes.GEOGRAPHY,
+     coordenadas: DataTypes.TEXT,
      userId: DataTypes.INTEGER
    });
    Local.associate = models => {

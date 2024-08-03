@@ -5,7 +5,7 @@ const checkUserExists = require('../middlewares/checkUserExists');
 const locaisRoutes = new Router();
 
 locaisRoutes.post('/', checkUserExists,LocalController.create);
-//  locaisRoutes.get('/', LocalController.searchAll);
+ locaisRoutes.get('/', LocalController.searchAll);
 // locaisRoutes.delete('/:id', LocalController.delete);
 // locaisRoutes.put('/:id', LocalController.update);
 //  locaisRoutes.get('/:id', LocalController.searchOne);

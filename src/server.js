@@ -15,7 +15,7 @@ class Server {
 
     async middlewares(server) {
         console.log("Running middlewares")
-        // server.use(cors()) 
+        server.use(cors()) 
         server.use(express.json())
         console.log("Middlewares ran successfully")
     }

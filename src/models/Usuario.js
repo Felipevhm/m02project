@@ -1,6 +1,6 @@
 // models/user.js
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const Usuario = sequelize.define('Usuario', {
     nome: DataTypes.STRING,
     sexo: DataTypes.STRING,
     cpf: { type: DataTypes.STRING, unique: true },
@@ -9,5 +9,5 @@ module.exports = (sequelize, DataTypes) => {
     senha: DataTypes.STRING,
     dataNascimento: DataTypes.DATE
   });
-  return User;
+  return Usuario;
 };

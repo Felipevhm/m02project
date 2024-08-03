@@ -8,6 +8,6 @@ locaisRoutes.post("/", checkUserExists, LocalController.create);
 locaisRoutes.get("/", LocalController.searchAll);
 locaisRoutes.put('/:id', LocalController.update);
 locaisRoutes.delete('/:id', LocalController.delete);
-// locaisRoutes.get("/:id", LocalController.searchOne);
+locaisRoutes.get("/:id", LocalController.searchOne);
 
 module.exports = locaisRoutes;

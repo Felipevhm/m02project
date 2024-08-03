@@ -78,87 +78,78 @@ class LocalController {
     }
   }
 
-
-async update(request, response) {
-  const { nome, cpf, email, senha, dataNascimento, endereco, sexo } = request.body;
-  const errors = [];
-  if ((!nome && !cpf && !email && !senha && !dataNascimento && !endereco && !sexo)) {
-    errors.push({
-      msg: "It is necessary for the update to have at least one valid value of name, cpf, email, password, date of birth, address, or gender.",
-      param: ["especialidade", "nome"],
-    });
-  }
-
-  if (errors.length > 0) {
-    return response.status(400).json({ errors });
-  }
-
-  try {
-    const id = request.params.id;
-    const dados = request.body;
-
-    const local = await Local.findByPk(id);
-
-    if (!local) {
-      return response.status(404).json({
-        mensagem: "No location found with this id",
+  async update(request, response) {
+    const { nome, cpf, email, senha, dataNascimento, endereco, sexo } =
+      request.body;
+    const errors = [];
+    if (
+      !nome &&
+      !cpf &&
+      !email &&
+      !senha &&
+      !dataNascimento &&
+      !endereco &&
+      !sexo
+    ) {
+      errors.push({
+        msg: "It is necessary for the update to have at least one valid value of name, cpf, email, password, date of birth, address, or gender.",
+        param: ["especialidade", "nome"],
       });
     }
 
-    if (dados.nome) local.nome = dados.nome;
-    if (dados.cpf) local.cpf = dados.cpf;
-    if (dados.email) local.email = dados.email;
-    if (dados.senha) local.senha = dados.senha;
-    if (dados.dataNascimento) local.dataNascimento = dados.dataNascimento;
-    if (dados.endereco) local.endereco = dados.endereco;
-    if (dados.sexo) local.sexo = dados.sexo;
+    if (errors.length > 0) {
+      return response.status(400).json({ errors });
+    }
 
-    await local.save();
+    try {
+      const id = request.params.id;
+      const dados = request.body;
 
-    response.json(local);
-  } catch (error) {
-    response.status(500).json({
-      mensagem: "Unable to update location",
-    });
+      const local = await Local.findByPk(id);
+
+      if (!local) {
+        return response.status(404).json({
+          mensagem: "No location found with this id",
+        });
+      }
+
+      if (dados.nome) local.nome = dados.nome;
+      if (dados.cpf) local.cpf = dados.cpf;
+      if (dados.email) local.email = dados.email;
+      if (dados.senha) local.senha = dados.senha;
+      if (dados.dataNascimento) local.dataNascimento = dados.dataNascimento;
+      if (dados.endereco) local.endereco = dados.endereco;
+      if (dados.sexo) local.sexo = dados.sexo;
+
+      await local.save();
+
+      response.json(local);
+    } catch (error) {
+      response.status(500).json({
+        mensagem: "Unable to update location",
+      });
+    }
   }
-}
 
-// async delete(request, response) {
-//   try {
-//     const id = request.params.id;
-//     const local = await Local.findByPk(id);
+  async delete(request, response) {
+    try {
+      const id = request.params.id;
+      const local = await Local.findByPk(id);
 
-//     if (!local) {
-//       return response.status(404).json({
-//         mensagem: "No location found with this id",
-//       });
-//     }
+      if (!local) {
+        return response.status(404).json({
+          mensagem: "No location found with this id",
+        });
+      }
 
-//     await local.destroy();
+      await local.destroy();
 
-//     response.status(204).json();
-//   } catch (error) {
-//     response.status(500).json({
-//       mensagem: "Unable to retrieve location",
-//     });
-//   }
-// }
-
-// async searchOne(request, response) {
-//   const id = request.params.id;
-//   const local = await Local.findByPk(id);
-
-//   if (!local) {
-//     return response.status(404).json({
-//       mensagem: "No location found with this id",
-//     });
-//   }
-
-//   response.json(local);
-// }
-
-
-
-
+      response.status(204).json();
+    } catch (error) {
+      response.status(500).json({
+        mensagem: "Unable to retrieve location",
+      });
+    }
+  }
 }
 module.exports = new LocalController();

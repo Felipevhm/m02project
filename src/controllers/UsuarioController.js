@@ -12,25 +12,25 @@ class UsuarioController {
     const errors = [];
     if (!nome) {
       errors.push({
-        msg: "Nome do usuário é obrigatório e não nulo",
+        msg: "User name is required and not null",
         param: "nome",
       });
     }
     if (!cpf) {
       errors.push({
-        msg: "CPF do usuário é obrigatório e não nulo",
+        msg: "CPF is required and not null",
         param: "cpf",
       });
     }
     if (!email) {
       errors.push({
-        msg: "Email do usuário é obrigatório e não nulo",
+        msg: "Email is required and not null",
         param: "email",
       });
     }
     if (!senha ) {
       errors.push({
-        msg: "Senha do usuário é obrigatória e não nula",
+        msg: "User password is required and not null",
         param: "senha",
       });
     }
@@ -52,7 +52,7 @@ class UsuarioController {
       return response.status(201).json(usuario);
     } catch (error) {
       response.status(500).json({
-        mensagem: "Não foi possível criar o usuario",
+        mensagem: "Unable to create user",
       });
     }
   }
@@ -91,7 +91,7 @@ class UsuarioController {
       response.json(usuarios);
     } catch (error) {
       response.status(500).json({
-        mensagem: "Não foi possível buscar os usuarios",
+        mensagem: "Unable to search for users",
       });
     }
   }
@@ -101,8 +101,8 @@ class UsuarioController {
     const errors = [];
     if ((!nome && !cpf && !email && !senha && !dataNascimento && !endereco && !sexo)) {
       errors.push({
-        msg: "É necessário para a atualização ao menos um valor válido de nome, cpf, email, senha, data de nascimento, endereco ou sexo.",
-        param: ["especialidade", "nome"],
+        msg: "At least one of the following must be a valid update value: name, cpf, email, password, birth date, address or gender.",
+        param: ["nome"],
       });
     }
 
@@ -118,7 +118,7 @@ class UsuarioController {
 
       if (!usuario) {
         return response.status(404).json({
-          mensagem: "Não foi encontrado um usuario com esse id",
+          mensagem: "User id not found",
         });
       }
 
@@ -135,7 +135,7 @@ class UsuarioController {
       response.json(usuario);
     } catch (error) {
       response.status(500).json({
-        mensagem: "Não foi possível atualizar o usuario",
+        mensagem: "Unable to update user",
       });
     }
   }
@@ -147,7 +147,7 @@ class UsuarioController {
 
       if (!usuario) {
         return response.status(404).json({
-          mensagem: "Não foi encontrado um usuario com esse id",
+          mensagem: "User with the given id was not found",
         });
       }
 
@@ -156,7 +156,7 @@ class UsuarioController {
       response.status(204).json();
     } catch (error) {
       response.status(500).json({
-        mensagem: "Não foi possível buscar o usuario",
+        mensagem: "Unable to search for user",
       });
     }
   }
@@ -167,7 +167,7 @@ class UsuarioController {
 
     if (!usuario) {
       return response.status(404).json({
-        mensagem: "Não foi encontrado um usuario com esse id",
+        mensagem: "Unable to find an user with the given id",
       });
     }
 

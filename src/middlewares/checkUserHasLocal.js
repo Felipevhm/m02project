@@ -12,12 +12,12 @@ async function checkUserHasLocal(req, res, next) {
 
     const userLocals = await Local.findAll({ where: { userId: userId } });
     if (userLocals.length > 0) {
-      return res.status(403).json({ error: 'User cannot be deleted as an associated place was found.' });
+      return res.status(403).json({ error: 'User cannot be deleted as an associated location was found.' });
     }
 
     next();
   } catch (error) {
-    console.error('Error checking user places:', error);
+    console.error('Error checking user locations:', error);
     return res.status(500).json({ error: 'Server had an internal error' });
   }
 }

@@ -7,15 +7,15 @@ const APP_PORT = process.env.APP_PORT
 class Server {
     
     constructor(server = express()) {
-      //   this.middlewares(server)
+         this.middlewares(server)
         this.database()
-      //   server.use(routes)
+        server.use(routes)
         this.initializeServer(server)
     }
 
     async middlewares(server) {
         console.log("Running middlewares")
-        server.use(cors()) 
+        // server.use(cors()) 
         server.use(express.json())
         console.log("Middlewares ran successfully")
     }

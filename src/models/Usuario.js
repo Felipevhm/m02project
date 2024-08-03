@@ -1,13 +1,14 @@
-// models/user.js
-module.exports = (sequelize, DataTypes) => {
-  const Usuario = sequelize.define('Usuario', {
-    nome: DataTypes.STRING,
-    sexo: DataTypes.STRING,
-    cpf: { type: DataTypes.STRING, unique: true },
-    endereco: DataTypes.STRING,
-    email: { type: DataTypes.STRING, unique: true },
-    senha: DataTypes.STRING,
-    dataNascimento: DataTypes.DATE
-  });
-  return Usuario;
-};
+const { DataTypes } = require("sequelize");
+const connection = require("../database/connection");
+
+const Usuario = connection.define("Users", {
+  nome: {type: DataTypes.STRING,allowNull: false},
+  sexo: DataTypes.STRING,
+  cpf: { type: DataTypes.STRING, unique: true, allowNull: false },
+  endereco: DataTypes.STRING,
+  email: { type: DataTypes.STRING, unique: true, allowNull: false },
+  senha: {type: DataTypes.STRING,allowNull: false},
+  dataNascimento: DataTypes.DATE,
+});
+
+module.exports = Usuario;

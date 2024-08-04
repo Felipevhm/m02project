@@ -28,7 +28,7 @@ class UsuarioController {
         param: "email",
       });
     }
-    if (!senha ) {
+    if (!senha) {
       errors.push({
         msg: "User password is required and not null",
         param: "senha",
@@ -37,6 +37,16 @@ class UsuarioController {
 
     if (errors.length > 0) {
       return response.status(400).json({ errors });
+    }
+
+    const existingUser = await Usuario.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (existingUser) {
+      return response.status(409).json({ message: "Account already exists" });
     }
 
     try {
@@ -59,32 +69,33 @@ class UsuarioController {
 
   async searchAll(request, response) {
     try {
-      const {nome, cpf, email, dataNascimento, endereco, sexo  } = request.query;
+      const { nome, cpf, email, dataNascimento, endereco, sexo } =
+        request.query;
       const where = {};
 
       if (nome) {
         where.nome = { [Op.like]: `%${nome}%` };
       }
-      
+
       if (cpf) {
         where.cpf = { [Op.like]: `%${cpf}%` };
       }
-      
+
       if (email) {
         where.email = { [Op.like]: `%${email}%` };
-      }      
+      }
       if (dataNascimento) {
         where.dataNascimento = { [Op.like]: `%${dataNascimento}%` };
       }
-      
+
       if (endereco) {
         where.endereco = { [Op.like]: `%${endereco}%` };
       }
-      
+
       if (sexo) {
         where.sexo = { [Op.like]: `%${sexo}%` };
       }
-      console.log('query IS:');
+      console.log("query IS:");
       console.log(request.query);
 
       const usuarios = await Usuario.findAll({ where });
@@ -97,9 +108,18 @@ class UsuarioController {
   }
 
   async update(request, response) {
-    const { nome, cpf, email, senha, dataNascimento, endereco, sexo } = request.body;
+    const { nome, cpf, email, senha, dataNascimento, endereco, sexo } =
+      request.body;
     const errors = [];
-    if ((!nome && !cpf && !email && !senha && !dataNascimento && !endereco && !sexo)) {
+    if (
+      !nome &&
+      !cpf &&
+      !email &&
+      !senha &&
+      !dataNascimento &&
+      !endereco &&
+      !sexo
+    ) {
       errors.push({
         msg: "At least one of the following must be a valid update value: name, cpf, email, password, birth date, address or gender.",
         param: ["nome"],

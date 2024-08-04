@@ -5,10 +5,10 @@ const authUser = require("../middlewares/authUser");
 
 const locaisRoutes = new Router();
 
-locaisRoutes.post("/", checkUserExists, LocalController.create);
-locaisRoutes.get("/",authUser , LocalController.searchAll);
-locaisRoutes.put('/:id', LocalController.update);
-locaisRoutes.delete('/:id', LocalController.delete);
+locaisRoutes.post("/",  authUser, LocalController.create);
+locaisRoutes.get("/", authUser, LocalController.searchAll);
+locaisRoutes.put("/:id", LocalController.update);
+locaisRoutes.delete("/:id", LocalController.delete);
 locaisRoutes.get("/:id", LocalController.searchOne);
 
 module.exports = locaisRoutes;

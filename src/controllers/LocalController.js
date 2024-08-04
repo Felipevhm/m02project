@@ -3,8 +3,9 @@ const { Op } = require("sequelize");
 
 class LocalController {
   async create(request, response) {
-    const { nome, descricao, localidade, coordenadas, userId } = request.body;
-
+    const { nome, descricao, localidade, coordenadas} = request.body;
+    const userId = request.currentId
+   
     const errors = [];
     if (!nome) {
       errors.push({
@@ -17,13 +18,6 @@ class LocalController {
       errors.push({
         msg: "Location coordinates is required and not null",
         param: "coordenadas",
-      });
-    }
-
-    if (!userId) {
-      errors.push({
-        msg: "The id of the owner user is required and not null",
-        param: "userId",
       });
     }
 
@@ -50,7 +44,7 @@ class LocalController {
 
   async searchAll(request, response) {
     try {
-      const { nome, descricao, localidade, coordenadas, userId } =
+      const { nome, descricao, localidade, coordenadas } =
         request.query;
       const where = {};
 
@@ -64,11 +58,7 @@ class LocalController {
 
     
         where.userId = request.currentId;
-      
-
-      console.log("currentID IS:");
-      console.log(request.currentId);
-
+   
       const locais = await Local.findAll({ where });
       response.json(locais);
     } catch (error) {
@@ -80,7 +70,7 @@ class LocalController {
 
 
 async update(request, response) {
-  const { nome, cpf, email, senha, dataNascimento, endereco, sexo } = request.body;
+  const { nome, descricao, localidade, coordenadas } = request.body;
   const errors = [];
   if ((!nome && !cpf && !email && !senha && !dataNascimento && !endereco && !sexo)) {
     errors.push({
@@ -95,8 +85,6 @@ async update(request, response) {
 
   try {
     const id = request.params.id;
-    const dados = request.body;
-
     const local = await Local.findByPk(id);
 
     if (!local) {
@@ -105,13 +93,11 @@ async update(request, response) {
       });
     }
 
-    if (dados.nome) local.nome = dados.nome;
-    if (dados.cpf) local.cpf = dados.cpf;
-    if (dados.email) local.email = dados.email;
-    if (dados.senha) local.senha = dados.senha;
-    if (dados.dataNascimento) local.dataNascimento = dados.dataNascimento;
-    if (dados.endereco) local.endereco = dados.endereco;
-    if (dados.sexo) local.sexo = dados.sexo;
+    if (nome) local.nome = nome;
+    if (descricao) local.descricao = descricao;
+    if (localidade) local.localidade = localidade;
+    if (coordenadas) local.coordenadas = coordenadas;
+    local.userId = 13;
 
     await local.save();
 

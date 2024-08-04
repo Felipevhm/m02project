@@ -67,7 +67,6 @@ class LocalController {
   }
 
   async update(request, response) {
-
     const { nome, descricao, localidade, coordenadas } = request.body;
     const errors = [];
     if (!nome && !descricao && !localidade && !coordenadas) {
@@ -117,7 +116,7 @@ class LocalController {
     try {
       const where = { userId: request.currentId };
       const id = request.params.id;
-      const local = await Local.findByPk(id,{where});
+      const local = await Local.findByPk(id, { where });
 
       if (!local) {
         return response.status(404).json({
@@ -142,12 +141,20 @@ class LocalController {
   }
 
   async searchOne(request, response) {
-    const id = request.params.id;
-    const local = await Local.findByPk(id);
+    const where = { userId: request.currentId };
+
+    const localId = request.params.id;
+    const local = await Local.findByPk(localId, { where });
 
     if (!local) {
       return response.status(404).json({
         mensagem: "No location found with this id",
+      });
+    }
+    if (!(local.userId === request.currentId)) {
+      return response.status(401).json({
+        mensagem:
+          "User does not have permission to read the specified location information",
       });
     }
 

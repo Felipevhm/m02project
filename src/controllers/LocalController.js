@@ -3,7 +3,8 @@ const { Op } = require("sequelize");
 
 class LocalController {
   async create(request, response) {
-    const { nome, descricao, localidade, coordenadas, userId } = request.body;
+    const { nome, descricao, localidade, coordenadas } = request.body;
+    const userId = request.currentId;
 
     const errors = [];
     if (!nome) {
@@ -17,13 +18,6 @@ class LocalController {
       errors.push({
         msg: "Location coordinates is required and not null",
         param: "coordenadas",
-      });
-    }
-
-    if (!userId) {
-      errors.push({
-        msg: "The id of the owner user is required and not null",
-        param: "userId",
       });
     }
 
@@ -50,8 +44,7 @@ class LocalController {
 
   async searchAll(request, response) {
     try {
-      const { nome, descricao, localidade, coordenadas, userId } =
-        request.query;
+      const { nome, descricao, localidade, coordenadas } = request.query;
       const where = {};
 
       if (nome) {
@@ -62,12 +55,7 @@ class LocalController {
         where.coordenadas = { [Op.like]: `%${coordenadas}%` };
       }
 
-      if (userId) {
-        where.userId = userId;
-      }
-
-      console.log("query IS:");
-      console.log(request.query);
+      where.userId = request.currentId;
 
       const locais = await Local.findAll({ where });
       response.json(locais);
@@ -78,87 +66,99 @@ class LocalController {
     }
   }
 
+  async update(request, response) {
+    const { nome, descricao, localidade, coordenadas } = request.body;
+    const errors = [];
+    if (!nome && !descricao && !localidade && !coordenadas) {
+      errors.push({
+        msg: "It is necessary for the update to have at least one valid value of name, description, location or coordinates .",
+        param: ["name"],
+      });
+    }
 
-async update(request, response) {
-  const { nome, cpf, email, senha, dataNascimento, endereco, sexo } = request.body;
-  const errors = [];
-  if ((!nome && !cpf && !email && !senha && !dataNascimento && !endereco && !sexo)) {
-    errors.push({
-      msg: "It is necessary for the update to have at least one valid value of name, cpf, email, password, date of birth, address, or gender.",
-      param: ["especialidade", "nome"],
-    });
+    if (errors.length > 0) {
+      return response.status(400).json({ errors });
+    }
+    const where = { userId: request.currentId };
+    try {
+      const localId = request.params.id;
+      const local = await Local.findByPk(localId, { where });
+
+      if (!local) {
+        return response.status(404).json({
+          mensagem: "No location found with this id",
+        });
+      }
+
+      if (!(local.userId === request.currentId)) {
+        return response.status(401).json({
+          mensagem: "User does not have permission to update this location",
+        });
+      }
+
+      if (nome) local.nome = nome;
+      if (descricao) local.descricao = descricao;
+      if (localidade) local.localidade = localidade;
+      if (coordenadas) local.coordenadas = coordenadas;
+      local.userId = request.currentId;
+
+      await local.save();
+
+      response.json(local);
+    } catch (error) {
+      response.status(500).json({
+        mensagem: "Unable to update location",
+      });
+    }
   }
 
-  if (errors.length > 0) {
-    return response.status(400).json({ errors });
+  async delete(request, response) {
+    try {
+      const where = { userId: request.currentId };
+      const id = request.params.id;
+      const local = await Local.findByPk(id, { where });
+
+      if (!local) {
+        return response.status(404).json({
+          mensagem: "No location found with this id",
+        });
+      }
+
+      if (!(local.userId === request.currentId)) {
+        return response.status(401).json({
+          mensagem: "User does not have permission to delete this location",
+        });
+      }
+
+      await local.destroy();
+
+      response.status(204).json();
+    } catch (error) {
+      response.status(500).json({
+        mensagem: "Unable to retrieve location",
+      });
+    }
   }
 
-  try {
-    const id = request.params.id;
-    const dados = request.body;
+  async searchOne(request, response) {
+    const where = { userId: request.currentId };
 
-    const local = await Local.findByPk(id);
+    const localId = request.params.id;
+    const local = await Local.findByPk(localId, { where });
 
     if (!local) {
       return response.status(404).json({
         mensagem: "No location found with this id",
       });
     }
-
-    if (dados.nome) local.nome = dados.nome;
-    if (dados.cpf) local.cpf = dados.cpf;
-    if (dados.email) local.email = dados.email;
-    if (dados.senha) local.senha = dados.senha;
-    if (dados.dataNascimento) local.dataNascimento = dados.dataNascimento;
-    if (dados.endereco) local.endereco = dados.endereco;
-    if (dados.sexo) local.sexo = dados.sexo;
-
-    await local.save();
+    if (!(local.userId === request.currentId)) {
+      return response.status(401).json({
+        mensagem:
+          "User does not have permission to read the specified location information",
+      });
+    }
 
     response.json(local);
-  } catch (error) {
-    response.status(500).json({
-      mensagem: "Unable to update location",
-    });
   }
-}
-
-async delete(request, response) {
-  try {
-    const id = request.params.id;
-    const local = await Local.findByPk(id);
-
-    if (!local) {
-      return response.status(404).json({
-        mensagem: "No location found with this id",
-      });
-    }
-
-    await local.destroy();
-
-    response.status(204).json();
-  } catch (error) {
-    response.status(500).json({
-      mensagem: "Unable to retrieve location",
-    });
-  }
-}
-
-async searchOne(request, response) {
-  const id = request.params.id;
-  const local = await Local.findByPk(id);
-
-  if (!local) {
-    return response.status(404).json({
-      mensagem: "No location found with this id",
-    });
-  }
-
-  response.json(local);
-}
-
-
-
-
 }
 module.exports = new LocalController();

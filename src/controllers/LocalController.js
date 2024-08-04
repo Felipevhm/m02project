@@ -8,14 +8,14 @@ class LocalController {
     const errors = [];
     if (!nome) {
       errors.push({
-        msg: "Place name is required and not null",
+        msg: "Location name is required and not null",
         param: "nome",
       });
     }
 
     if (!coordenadas) {
       errors.push({
-        msg: "Place coordinates is required and not null",
+        msg: "Location coordinates is required and not null",
         param: "coordenadas",
       });
     }
@@ -41,9 +41,9 @@ class LocalController {
       });
       return response.status(201).json(local);
     } catch (error) {
-      console.error("Error creating place:", error);
+      console.error("Error creating location:", error);
       return response.status(500).json({
-        mensagem: "Error creating place",
+        mensagem: "Error creating location",
       });
     }
   }
@@ -73,10 +73,92 @@ class LocalController {
       response.json(locais);
     } catch (error) {
       response.status(500).json({
-        mensagem: "Unable to search for places",
+        mensagem: "Unable to search for locations",
       });
     }
   }
+
+
+async update(request, response) {
+  const { nome, cpf, email, senha, dataNascimento, endereco, sexo } = request.body;
+  const errors = [];
+  if ((!nome && !cpf && !email && !senha && !dataNascimento && !endereco && !sexo)) {
+    errors.push({
+      msg: "It is necessary for the update to have at least one valid value of name, cpf, email, password, date of birth, address, or gender.",
+      param: ["especialidade", "nome"],
+    });
+  }
+
+  if (errors.length > 0) {
+    return response.status(400).json({ errors });
+  }
+
+  try {
+    const id = request.params.id;
+    const dados = request.body;
+
+    const local = await Local.findByPk(id);
+
+    if (!local) {
+      return response.status(404).json({
+        mensagem: "No location found with this id",
+      });
+    }
+
+    if (dados.nome) local.nome = dados.nome;
+    if (dados.cpf) local.cpf = dados.cpf;
+    if (dados.email) local.email = dados.email;
+    if (dados.senha) local.senha = dados.senha;
+    if (dados.dataNascimento) local.dataNascimento = dados.dataNascimento;
+    if (dados.endereco) local.endereco = dados.endereco;
+    if (dados.sexo) local.sexo = dados.sexo;
+
+    await local.save();
+
+    response.json(local);
+  } catch (error) {
+    response.status(500).json({
+      mensagem: "Unable to update location",
+    });
+  }
 }
 
+async delete(request, response) {
+  try {
+    const id = request.params.id;
+    const local = await Local.findByPk(id);
+
+    if (!local) {
+      return response.status(404).json({
+        mensagem: "No location found with this id",
+      });
+    }
+
+    await local.destroy();
+
+    response.status(204).json();
+  } catch (error) {
+    response.status(500).json({
+      mensagem: "Unable to retrieve location",
+    });
+  }
+}
+
+async searchOne(request, response) {
+  const id = request.params.id;
+  const local = await Local.findByPk(id);
+
+  if (!local) {
+    return response.status(404).json({
+      mensagem: "No location found with this id",
+    });
+  }
+
+  response.json(local);
+}
+
+
+
+
+}
 module.exports = new LocalController();

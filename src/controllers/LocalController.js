@@ -80,9 +80,7 @@ class LocalController {
     if (errors.length > 0) {
       return response.status(400).json({ errors });
     }
-
     const where = { userId: request.currentId };
-    // where.userId = request.currentId;
     try {
       const localId = request.params.id;
       const local = await Local.findByPk(localId, { where });
@@ -117,12 +115,19 @@ class LocalController {
 
   async delete(request, response) {
     try {
+      const where = { userId: request.currentId };
       const id = request.params.id;
-      const local = await Local.findByPk(id);
+      const local = await Local.findByPk(id,{where});
 
       if (!local) {
         return response.status(404).json({
           mensagem: "No location found with this id",
+        });
+      }
+
+      if (!(local.userId === request.currentId)) {
+        return response.status(401).json({
+          mensagem: "User does not have permission to delete this location",
         });
       }
 

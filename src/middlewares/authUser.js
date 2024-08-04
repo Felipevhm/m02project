@@ -17,7 +17,7 @@ function authUser(request, response, next) {
         try {
             const result = verify(token, process.env.JWT_SECRET);
 
-            request.userId = result.id;
+            request.currentId = result.id;
             next();
         } catch (error) {
             if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {

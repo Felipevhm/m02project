@@ -62,12 +62,12 @@ class LocalController {
         where.coordenadas = { [Op.like]: `%${coordenadas}%` };
       }
 
-      if (userId) {
-        where.userId = userId;
-      }
+    
+        where.userId = request.currentId;
+      
 
-      console.log("query IS:");
-      console.log(request.query);
+      console.log("currentID IS:");
+      console.log(request.currentId);
 
       const locais = await Local.findAll({ where });
       response.json(locais);

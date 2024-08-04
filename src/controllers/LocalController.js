@@ -1,5 +1,6 @@
 const Local = require("../models/Local");
 const { Op } = require("sequelize");
+const {getMapLocal,getGoogleMapsLink} = require("../services/map.service");
 
 class LocalController {
   async create(request, response) {
@@ -44,6 +45,26 @@ class LocalController {
 
   async searchAll(request, response) {
     try {
+
+      console.log('request params')
+      console.log(request.params)
+      
+      const mapResult= await getMapLocal(request.query.cep)
+      console.log("~~Testando uso de mapas~~")
+      console.log(mapResult)
+
+      const googleMapsLink= await getGoogleMapsLink(mapResult)
+      console.log("~~Testando uso de GoogleMaps~~")
+      console.log(googleMapsLink)
+
+      if (!mapResult) {
+        return response.status(404).json({
+          mensagem: "No location found with this CEP",
+        });
+      }
+
+   
+
       const { nome, descricao, localidade, coordenadas } = request.query;
       const where = {};
 
@@ -64,6 +85,9 @@ class LocalController {
         mensagem: "Unable to search for locations",
       });
     }
+
+
+    
   }
 
   async update(request, response) {

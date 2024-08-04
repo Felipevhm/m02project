@@ -3,9 +3,9 @@ const { Op } = require("sequelize");
 
 class LocalController {
   async create(request, response) {
-    const { nome, descricao, localidade, coordenadas} = request.body;
-    const userId = request.currentId
-   
+    const { nome, descricao, localidade, coordenadas } = request.body;
+    const userId = request.currentId;
+
     const errors = [];
     if (!nome) {
       errors.push({
@@ -44,8 +44,7 @@ class LocalController {
 
   async searchAll(request, response) {
     try {
-      const { nome, descricao, localidade, coordenadas } =
-        request.query;
+      const { nome, descricao, localidade, coordenadas } = request.query;
       const where = {};
 
       if (nome) {
@@ -56,9 +55,8 @@ class LocalController {
         where.coordenadas = { [Op.like]: `%${coordenadas}%` };
       }
 
-    
-        where.userId = request.currentId;
-   
+      where.userId = request.currentId;
+
       const locais = await Local.findAll({ where });
       response.json(locais);
     } catch (error) {
@@ -68,22 +66,77 @@ class LocalController {
     }
   }
 
+  async update(request, response) {
 
-async update(request, response) {
-  const { nome, descricao, localidade, coordenadas } = request.body;
-  const errors = [];
-  if ((!nome && !descricao && !localidade && !coordenadas)) {
-    errors.push({
-      msg: "It is necessary for the update to have at least one valid value of name, description, location or coordinates .",
-      param: ["name"],
-    });
+    const { nome, descricao, localidade, coordenadas } = request.body;
+    const errors = [];
+    if (!nome && !descricao && !localidade && !coordenadas) {
+      errors.push({
+        msg: "It is necessary for the update to have at least one valid value of name, description, location or coordinates .",
+        param: ["name"],
+      });
+    }
+
+    if (errors.length > 0) {
+      return response.status(400).json({ errors });
+    }
+
+    const where = { userId: request.currentId };
+    // where.userId = request.currentId;
+    try {
+      const localId = request.params.id;
+      const local = await Local.findByPk(localId, { where });
+
+      if (!local) {
+        return response.status(404).json({
+          mensagem: "No location found with this id",
+        });
+      }
+
+      if (!(local.userId === request.currentId)) {
+        return response.status(401).json({
+          mensagem: "User does not have permission to update this location",
+        });
+      }
+
+      if (nome) local.nome = nome;
+      if (descricao) local.descricao = descricao;
+      if (localidade) local.localidade = localidade;
+      if (coordenadas) local.coordenadas = coordenadas;
+      local.userId = request.currentId;
+
+      await local.save();
+
+      response.json(local);
+    } catch (error) {
+      response.status(500).json({
+        mensagem: "Unable to update location",
+      });
+    }
   }
 
-  if (errors.length > 0) {
-    return response.status(400).json({ errors });
+  async delete(request, response) {
+    try {
+      const id = request.params.id;
+      const local = await Local.findByPk(id);
+
+      if (!local) {
+        return response.status(404).json({
+          mensagem: "No location found with this id",
+        });
+      }
+
+      await local.destroy();
+
+      response.status(204).json();
+    } catch (error) {
+      response.status(500).json({
+        mensagem: "Unable to retrieve location",
+      });
+    }
   }
 
-  try {
+  async searchOne(request, response) {
     const id = request.params.id;
     const local = await Local.findByPk(id);
 
@@ -92,59 +145,8 @@ async update(request, response) {
         mensagem: "No location found with this id",
       });
     }
-
-    if (nome) local.nome = nome;
-    if (descricao) local.descricao = descricao;
-    if (localidade) local.localidade = localidade;
-    if (coordenadas) local.coordenadas = coordenadas;
-    local.userId = 13;
-
-    await local.save();
 
     response.json(local);
-  } catch (error) {
-    response.status(500).json({
-      mensagem: "Unable to update location",
-    });
   }
-}
-
-async delete(request, response) {
-  try {
-    const id = request.params.id;
-    const local = await Local.findByPk(id);
-
-    if (!local) {
-      return response.status(404).json({
-        mensagem: "No location found with this id",
-      });
-    }
-
-    await local.destroy();
-
-    response.status(204).json();
-  } catch (error) {
-    response.status(500).json({
-      mensagem: "Unable to retrieve location",
-    });
-  }
-}
-
-async searchOne(request, response) {
-  const id = request.params.id;
-  const local = await Local.findByPk(id);
-
-  if (!local) {
-    return response.status(404).json({
-      mensagem: "No location found with this id",
-    });
-  }
-
-  response.json(local);
-}
-
-
-
-
 }
 module.exports = new LocalController();

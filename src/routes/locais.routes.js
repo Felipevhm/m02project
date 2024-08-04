@@ -7,7 +7,7 @@ const locaisRoutes = new Router();
 
 locaisRoutes.post("/",  authUser, LocalController.create);
 locaisRoutes.get("/", authUser, LocalController.searchAll);
-locaisRoutes.put("/:id", LocalController.update);
+locaisRoutes.put("/:id",authUser, LocalController.update);
 locaisRoutes.delete("/:id", LocalController.delete);
 locaisRoutes.get("/:id", LocalController.searchOne);
 

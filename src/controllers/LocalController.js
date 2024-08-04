@@ -72,10 +72,10 @@ class LocalController {
 async update(request, response) {
   const { nome, descricao, localidade, coordenadas } = request.body;
   const errors = [];
-  if ((!nome && !cpf && !email && !senha && !dataNascimento && !endereco && !sexo)) {
+  if ((!nome && !descricao && !localidade && !coordenadas)) {
     errors.push({
-      msg: "It is necessary for the update to have at least one valid value of name, cpf, email, password, date of birth, address, or gender.",
-      param: ["especialidade", "nome"],
+      msg: "It is necessary for the update to have at least one valid value of name, description, location or coordinates .",
+      param: ["name"],
     });
   }
 

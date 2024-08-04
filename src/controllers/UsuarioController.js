@@ -42,6 +42,7 @@ class UsuarioController {
     const existingUser = await Usuario.findOne({
       where: {
         email,
+        cpf
       },
     });
 

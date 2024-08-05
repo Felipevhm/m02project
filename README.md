@@ -1,6 +1,7 @@
 # Recycle Spot ♻️
 
-![screencapture-localhost-3000-docs-2024-08-05-01_29_34](https://github.com/user-attachments/assets/51664b6d-739c-403a-9936-2b71b68bb2c3)
+
+<img width="960" alt="recycle_spot_api - Copia" src="https://github.com/user-attachments/assets/53ec329b-e8c6-4829-863e-8a5b6f276bd2">
 
 ## Description
 

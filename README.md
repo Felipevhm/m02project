@@ -4,7 +4,7 @@
 
 ## Description
 
-RecycleSpot API is a system developed to automate actions related to storing information about waste collection locations and users. This system allows efficient management of users and collection locations, ensuring data security and integrity through JWT authentication.
+RecycleSpot API is a system developed to automate actions related to storing information about waste collection locations and users. This system allows management of users and collection locations, ensuring data security and integrity through JWT authentication.
 
 ## Technologies 
 

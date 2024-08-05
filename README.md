@@ -1,7 +1,6 @@
 # Recycle Spot ♻️
 
-![image](https://github.com/Felipevhm/recycleSpot/assets/58308361/5161963c-e5c1-446f-b521-9c5716b5a2b7)
-
+![screencapture-localhost-3000-docs-2024-08-05-01_29_34](https://github.com/user-attachments/assets/51664b6d-739c-403a-9936-2b71b68bb2c3)
 
 ## Description
 

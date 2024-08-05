@@ -105,7 +105,7 @@ class LocalController {
   }
 
   async update(request, response) {
-    const { nome, descricao, localidade, coordenadas, cep } = request.body;
+    const { nome, descricao, localidade, coordenadas, cep,googleMapsLink } = request.body;
     const errors = [];
     if (
       !nome &&
@@ -134,7 +134,7 @@ class LocalController {
           mensagem: "No location found with this id",
         });
       }
-
+      
       if (!(local.userId === request.currentId)) {
         return response.status(401).json({
           mensagem: "User does not have permission to update this location",
@@ -198,6 +198,13 @@ class LocalController {
         mensagem: "No location found with this id",
       });
     }
+
+console.log("local.userId:")
+console.log(local.userId)
+console.log("request.currentId:")
+console.log(request.currentId)
+
+
     if (!(local.userId === request.currentId)) {
       return response.status(401).json({
         mensagem:

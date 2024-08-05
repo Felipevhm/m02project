@@ -9,6 +9,6 @@ locaisRoutes.post("/",  authUser, LocalController.create);
 locaisRoutes.get("/", authUser, LocalController.searchAll);
 locaisRoutes.put("/:id",authUser, LocalController.update);
 locaisRoutes.delete("/:id",authUser, LocalController.delete);
-locaisRoutes.get("/:id", LocalController.searchOne);
+locaisRoutes.get("/:id",authUser, LocalController.searchOne);
 
 module.exports = locaisRoutes;

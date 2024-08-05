@@ -40,7 +40,7 @@ RecycleSpot API is a system developed to automate actions related to storing inf
 2. Navigate to the project directory:
 
     ```bash
-    cd recyclespot-api
+    cd m02project
     ```
 
 3. Install dependencies:
@@ -77,7 +77,7 @@ RecycleSpot API is a system developed to automate actions related to storing inf
 
 API documentation is available via Swagger. To access it, start the server and navigate to:
 
-http://localhost:3000/api-docs
+http://localhost:3000/docs
 
 ## Features
 

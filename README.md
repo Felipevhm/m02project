@@ -78,10 +78,16 @@ JWT_SECRET=j438n493n7348n5
 npx sequelize db:seed:all
 ```
 
-7. Start the server:
+7. Ensure your database is running and move to the /src folder before running the system:
 
     ```bash
-    npm start
+    cd /src
+    ```
+
+8. Start the server:
+
+    ```bash
+    nodemon index.js
     ```
 
 ### API Documentation
@@ -94,16 +100,15 @@ http://localhost:3000/docs
 
 ### Users
 
-- **Initial Load**: The system loads a list of users already registered in the database.
 - **Registration and Login**: Endpoints for user registration and login.
-- **User Information**: Users must provide information such as name, gender, CPF, address, email, password, date of birth.
+- **User Information**: Users must provide information such as name, gender, CPF, address, email, password and date of birth.
 - **Validation**: Rules to prevent registration of users with the same CPF or email.
 
 ### Waste Collection
 
 - **Location Registration**: Users can register waste collection locations, providing name, description, location, geographic coordinates, etc.
 - **Google Maps Link**: Generation of a Google Maps link pointing to the registered location.
-- **Business Rules**: Specific validations, such as not allowing the deletion of a user who has associated locations.
+- **Business Rules**: Specific validations, such as not allowing the deletion of a user who has associated locations and only the users can deal with the routes that belong to them.
 
 ### JWT Authentication
 
@@ -133,9 +138,9 @@ http://localhost:3000/docs
 
 ## Future Improvements
 
-- Implementation of automated tests.
-- User interface enhancements.
-- Addition of new features, such as notifications and reports.
+- Update variable names for better comprehension to english speakers.
+- Update documentation to improve user experience.
+- Permission to access registered places by other users, leading to a network of recycling spots.
 
 ## Contributions
 
@@ -143,4 +148,4 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 ## Contact
 
-For questions and suggestions, please contact via email: your-email@domain.com
+For questions and suggestions, please contact via email: fvhmanhaes@gmail.comn

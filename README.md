@@ -20,7 +20,7 @@ RecycleSpot API is a system developed to automate actions related to storing inf
 
 ## Structure
 
-![image](https://github.com/user-attachments/assets/2180b6f8-b960-4a2f-8bf7-4e30da8a1385)
+![image](https://github.com/user-attachments/assets/333e702f-6042-4c02-964b-9516bb9226a4)
 
 
 ## Environment Setup

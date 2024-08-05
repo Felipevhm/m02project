@@ -56,11 +56,14 @@ RecycleSpot API is a system developed to automate actions related to storing inf
     Create a `.env` file in the project root with the following content:
 
     ```
-    DB_HOST=localhost
-    DB_USER=your-username
-    DB_PASSWORD=your-password
-    DB_NAME=database-name
-    JWT_SECRET=your-secret-key
+APP_PORT=3000
+DB_DIALECT=postgres
+DB_HOST=localhost
+DB_DATABASE=m02project
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+JWT_SECRET=j438n493n7348n5 
     ```
 
 5. Run migrations to create the database tables:

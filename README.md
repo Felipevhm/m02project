@@ -69,14 +69,14 @@ JWT_SECRET=j438n493n7348n5
 5. Run migrations to create the database tables:
 
     ```bash
-    npx sequelize db:migrate
+         npx sequelize db:migrate
     ```
 
 6(optional). Run seeders to populate the database tables:
 
-    ```bash
-    npx sequelize db:seed:all
-    ```
+```bash
+npx sequelize db:seed:all
+```
 
 7. Start the server:
 

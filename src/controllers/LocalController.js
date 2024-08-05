@@ -1,24 +1,50 @@
 const Local = require("../models/Local");
 const { Op } = require("sequelize");
+const { getMapLocal, getGoogleMapsLink } = require("../services/map.service");
 
 class LocalController {
   async create(request, response) {
-    const { nome, descricao, localidade, coordenadas } = request.body;
+    const { nome, cep } = request.body;
+    let { coordenadas, descricao, localidade } = request.body;
     const userId = request.currentId;
-
     const errors = [];
-    if (!nome) {
-      errors.push({
-        msg: "Location name is required and not null",
-        param: "nome",
+
+    if (!coordenadas) {
+      const mapResult = await getMapLocal(cep);
+      if (!mapResult || !mapResult.lat || !mapResult.lon) {
+        return response.status(400).json({
+          msg: "Invalid coordinates",
+          param: "coordenadas",
+        });
+      }
+      coordenadas = `${mapResult.lat},${mapResult.lon}`;
+    }
+
+    const [coordinateLat, coordinateLon] = coordenadas.split(",");
+    const googleMapsLink = await getGoogleMapsLink({
+      coordinateLat,
+      coordinateLon,
+    });
+    if (!googleMapsLink) {
+      return response.status(400).json({
+        msg: "No location found in GoogleMaps",
+        param: "googleMapsLink",
       });
     }
 
-    if (!coordenadas) {
-      errors.push({
-        msg: "Location coordinates is required and not null",
-        param: "coordenadas",
-      });
+    if (!nome) {
+      errors.push({ msg: "Location name is required", param: "nome" });
+    }
+
+    if (!cep) {
+      errors.push({ msg: "Location cep is required", param: "cep" });
+    }
+
+    if (!descricao) {
+      descricao = "";
+    }
+    if (!localidade) {
+      localidade = "";
     }
 
     if (errors.length > 0) {
@@ -29,22 +55,25 @@ class LocalController {
       const local = await Local.create({
         nome,
         descricao,
+        cep,
+        userId,
         localidade,
         coordenadas,
-        userId,
+        googleMapsLink,
       });
       return response.status(201).json(local);
     } catch (error) {
-      console.error("Error creating location:", error);
-      return response.status(500).json({
-        mensagem: "Error creating location",
-      });
+      console.error("Error creating new location:", error);
+      return response
+        .status(500)
+        .json({ message: "Error creating new location", error: error.message });
     }
   }
 
   async searchAll(request, response) {
     try {
-      const { nome, descricao, localidade, coordenadas } = request.query;
+      const { nome, descricao, localidade, coordenadas, cep, googleMapsLink } =
+        request.query;
       const where = {};
 
       if (nome) {
@@ -53,6 +82,13 @@ class LocalController {
 
       if (coordenadas) {
         where.coordenadas = { [Op.like]: `%${coordenadas}%` };
+      }
+
+      if (cep) {
+        where.cep = { [Op.like]: `%${cep}%` };
+      }
+      if (googleMapsLink) {
+        where.googleMapsLink = { [Op.like]: `%${googleMapsLink}%` };
       }
 
       where.userId = request.currentId;
@@ -67,11 +103,19 @@ class LocalController {
   }
 
   async update(request, response) {
-    const { nome, descricao, localidade, coordenadas } = request.body;
+    const { nome, descricao, localidade, coordenadas, cep, googleMapsLink } =
+      request.body;
     const errors = [];
-    if (!nome && !descricao && !localidade && !coordenadas) {
+    if (
+      !nome &&
+      !descricao &&
+      !localidade &&
+      !coordenadas &&
+      !cep &&
+      !googleMapsLink
+    ) {
       errors.push({
-        msg: "It is necessary for the update to have at least one valid value of name, description, location or coordinates .",
+        msg: "It is necessary for the update to have at least one valid value of name, description, location, coordinates, CEP or googleMapsLink.",
         param: ["name"],
       });
     }
@@ -101,6 +145,8 @@ class LocalController {
       if (localidade) local.localidade = localidade;
       if (coordenadas) local.coordenadas = coordenadas;
       local.userId = request.currentId;
+      if (cep) local.cep = cep;
+      if (googleMapsLink) local.googleMapsLink = googleMapsLink;
 
       await local.save();
 
@@ -151,6 +197,12 @@ class LocalController {
         mensagem: "No location found with this id",
       });
     }
+
+    console.log("local.userId:");
+    console.log(local.userId);
+    console.log("request.currentId:");
+    console.log(request.currentId);
+
     if (!(local.userId === request.currentId)) {
       return response.status(401).json({
         mensagem:
@@ -159,6 +211,28 @@ class LocalController {
     }
 
     response.json(local);
+  }
+
+  async searchOneMap(request, response) {
+    const where = { userId: request.currentId };
+
+    const localId = request.params.id;
+    const local = await Local.findByPk(localId, { where });
+
+    if (!local) {
+      return response.status(404).json({
+        mensagem: "No location found with this id",
+      });
+    }
+    if (!(local.userId === request.currentId)) {
+      return response.status(401).json({
+        mensagem:
+          "User does not have permission to read the specified location information",
+      });
+    }
+    const nome = local.nome;
+    const googleMapsLink = local.googleMapsLink;
+    response.json({ nome, googleMapsLink });
   }
 }
 module.exports = new LocalController();

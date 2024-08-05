@@ -6,8 +6,13 @@ const LoginController = require('../controllers/LoginController')
 
 const routes = new Router();
 
-routes.use("/usuarios", usuariosRoutes);
-routes.use("/locais", locaisRoutes);
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./doc.swagger.json');
+
+routes.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+routes.use("/usuario", usuariosRoutes);
+routes.use("/local", locaisRoutes);
 routes.post('/login', LoginController.login)
 
 

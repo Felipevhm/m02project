@@ -63,8 +63,8 @@ DB_DATABASE=m02project
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=postgres
-JWT_SECRET=j438n493n7348n5 
-    ```
+JWT_SECRET=j438n493n7348n5
+```
 
 5. Run migrations to create the database tables:
 
@@ -72,7 +72,13 @@ JWT_SECRET=j438n493n7348n5
     npx sequelize db:migrate
     ```
 
-6. Start the server:
+6(optional). Run seeders to populate the database tables:
+
+    ```bash
+    npx sequelize db:seed:all
+    ```
+
+7. Start the server:
 
     ```bash
     npm start

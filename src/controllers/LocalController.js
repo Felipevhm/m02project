@@ -64,13 +64,11 @@ class LocalController {
       return response.status(201).json(local);
     } catch (error) {
       console.error("Error creating new location:", error);
-      return response.status(500).json({ message: "Error creating new location", error: error.message });
+      return response
+        .status(500)
+        .json({ message: "Error creating new location", error: error.message });
     }
   }
-
-
-
-
 
   async searchAll(request, response) {
     try {
@@ -105,7 +103,8 @@ class LocalController {
   }
 
   async update(request, response) {
-    const { nome, descricao, localidade, coordenadas, cep,googleMapsLink } = request.body;
+    const { nome, descricao, localidade, coordenadas, cep, googleMapsLink } =
+      request.body;
     const errors = [];
     if (
       !nome &&
@@ -134,7 +133,7 @@ class LocalController {
           mensagem: "No location found with this id",
         });
       }
-      
+
       if (!(local.userId === request.currentId)) {
         return response.status(401).json({
           mensagem: "User does not have permission to update this location",
@@ -199,11 +198,10 @@ class LocalController {
       });
     }
 
-console.log("local.userId:")
-console.log(local.userId)
-console.log("request.currentId:")
-console.log(request.currentId)
-
+    console.log("local.userId:");
+    console.log(local.userId);
+    console.log("request.currentId:");
+    console.log(request.currentId);
 
     if (!(local.userId === request.currentId)) {
       return response.status(401).json({
@@ -213,6 +211,28 @@ console.log(request.currentId)
     }
 
     response.json(local);
+  }
+
+  async searchOneMap(request, response) {
+    const where = { userId: request.currentId };
+
+    const localId = request.params.id;
+    const local = await Local.findByPk(localId, { where });
+
+    if (!local) {
+      return response.status(404).json({
+        mensagem: "No location found with this id",
+      });
+    }
+    if (!(local.userId === request.currentId)) {
+      return response.status(401).json({
+        mensagem:
+          "User does not have permission to read the specified location information",
+      });
+    }
+    const nome = local.nome;
+    const googleMapsLink = local.googleMapsLink;
+    response.json({ nome, googleMapsLink });
   }
 }
 module.exports = new LocalController();

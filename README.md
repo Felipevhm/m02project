@@ -18,21 +18,8 @@ RecycleSpot API is a system developed to automate actions related to storing inf
 
 ## Structure
 
-recyclespot-api/
-├── src/
-│ ├── controllers/
-│ ├── middlewares/
-│ ├── models/
-│ ├── routes/
-│ ├── services/
-│ ├── utils/
-│ ├── app.js
-│ ├── database.js
-│ └── server.js
-├── .env
-├── .gitignore
-├── package.json
-└── README.md
+![image](https://github.com/user-attachments/assets/2180b6f8-b960-4a2f-8bf7-4e30da8a1385)
+
 
 ## Environment Setup
 

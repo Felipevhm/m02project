@@ -9,12 +9,14 @@ RecycleSpot API is a system developed to automate actions related to storing inf
 ## Technologies 
 
 - **Node.js**: Platform for server development.
-- **Express**: Framework for creating routes and middleware.
+- **Express**: Framework for creating routes and middlewares.
+
 - **PostgreSQL**: Relational database.
 - **Sequelize**: ORM for database interaction.
-- **Swagger**: Tool for API documentation.
-- **Axios**: HTTP client for making requests.
 - **JWT (JSON Web Token)**: Authentication mechanism.
+- **Axios**: HTTP client for making requests.
+
+- **Swagger**: Tool for API documentation.
 
 ## Structure
 

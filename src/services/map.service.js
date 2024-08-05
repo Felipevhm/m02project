@@ -30,15 +30,15 @@ async function getMapLocal(cep) {
 
 async function getGoogleMapsLink(local) {
    try {
-       const { lat, lon } = local;
+       const { coordinateLat, coordinateLon } = local;
 
-       if (!lat || !lon) {
+       if (!coordinateLat || !coordinateLon) {
            const error = new Error('Incomplete location data');
            error.statusCode = 400;
            throw error;
        }
 
-       const googleMapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+       const googleMapsLink = `https://www.google.com/maps?q=${coordinateLat},${coordinateLon}`;
        return googleMapsLink;
    } catch (error) {
        console.error('Error in getGoogleMapsLink:', error.message);

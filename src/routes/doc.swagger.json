@@ -21,195 +21,414 @@
   "paths": {
     "/login": {
       "post": {
-        "description": "",
+        "tags": [
+          "Login"
+        ],
+        "description": "Endpoint para login",
         "parameters": [
           {
-            "name": "body",
+            "name": "login",
             "in": "body",
+            "description": "Credenciais de login",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "teste@gmail.com"
                 },
                 "senha": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "teste123"
                 }
-              }
+              },
+              "required": [
+                "email",
+                "senha"
+              ]
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Login bem sucedido",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "token_jwt"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Nome do Usuário"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Email e senha são obrigatórios",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Email and password are required"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Conta não encontrada",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Account not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Erro ao fazer login",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Error logging in"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
     "/usuario/": {
       "post": {
-        "description": "",
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Endpoint para criar um usuário",
         "parameters": [
           {
-            "name": "body",
+            "name": "criarUsuario",
             "in": "body",
+            "description": "Dados do usuário",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "nome": {
-                  "example": "any"
-                },
-                "cpf": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Usuario Teste"
                 },
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "teste@gmail.com"
                 },
                 "senha": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "teste123"
+                },
+                "cpf": {
+                  "type": "string",
+                  "example": "12345678900"
                 },
                 "dataNascimento": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "2000-01-01"
                 },
                 "endereco": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Rua Teste, 123"
                 },
                 "sexo": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "M"
                 }
-              }
+              },
+              "required": [
+                "nome",
+                "email",
+                "senha",
+                "cpf"
+              ]
             }
           }
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Usuário criado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Usuario Teste"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "teste@gmail.com"
+                },
+                "cpf": {
+                  "type": "string",
+                  "example": "12345678900"
+                },
+                "dataNascimento": {
+                  "type": "string",
+                  "example": "2000-01-01"
+                },
+                "endereco": {
+                  "type": "string",
+                  "example": "Rua Teste, 123"
+                },
+                "sexo": {
+                  "type": "string",
+                  "example": "M"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Erro na validação dos dados",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "msg": {
+                        "type": "string",
+                        "example": "Mensagem de erro"
+                      },
+                      "param": {
+                        "type": "string",
+                        "example": "campo"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "409": {
-            "description": "Conflict"
+            "description": "Conta já existe",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Account already exists"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Erro ao criar usuário",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Unable to create user"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
       "get": {
-        "description": "",
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Endpoint para buscar todos os usuários",
         "parameters": [
           {
             "name": "nome",
             "in": "query",
+            "description": "Nome do usuário",
+            "required": false,
             "type": "string"
           },
           {
             "name": "cpf",
             "in": "query",
+            "description": "CPF do usuário",
+            "required": false,
             "type": "string"
           },
           {
             "name": "email",
             "in": "query",
+            "description": "Email do usuário",
+            "required": false,
             "type": "string"
           },
           {
             "name": "dataNascimento",
             "in": "query",
+            "description": "Data de nascimento do usuário",
+            "required": false,
             "type": "string"
           },
           {
             "name": "endereco",
             "in": "query",
+            "description": "Endereço do usuário",
+            "required": false,
             "type": "string"
           },
           {
             "name": "sexo",
             "in": "query",
+            "description": "Sexo do usuário",
+            "required": false,
             "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Usuários buscados com sucesso",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "nome": {
+                    "type": "string",
+                    "example": "Usuario Teste"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "teste@gmail.com"
+                  },
+                  "cpf": {
+                    "type": "string",
+                    "example": "12345678900"
+                  },
+                  "dataNascimento": {
+                    "type": "string",
+                    "example": "2000-01-01"
+                  },
+                  "endereco": {
+                    "type": "string",
+                    "example": "Rua Teste, 123"
+                  },
+                  "sexo": {
+                    "type": "string",
+                    "example": "M"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Erro ao buscar usuários",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Unable to search for users"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
     "/usuario/{id}": {
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
       "put": {
-        "description": "",
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Endpoint para atualizar um usuário",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "ID do usuário"
           },
           {
-            "name": "body",
+            "name": "atualizarUsuario",
             "in": "body",
+            "description": "Dados do usuário para atualizar",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "nome": {
-                  "example": "any"
-                },
-                "cpf": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Usuario Atualizado"
                 },
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "atualizado@gmail.com"
                 },
                 "senha": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "atualizado123"
+                },
+                "cpf": {
+                  "type": "string",
+                  "example": "12345678901"
                 },
                 "dataNascimento": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "2000-02-02"
                 },
                 "endereco": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Rua Atualizada, 123"
                 },
                 "sexo": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "F"
                 }
               }
             }
@@ -217,42 +436,249 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Usuário atualizado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Usuario Atualizado"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "atualizado@gmail.com"
+                },
+                "cpf": {
+                  "type": "string",
+                  "example": "12345678901"
+                },
+                "dataNascimento": {
+                  "type": "string",
+                  "example": "2000-02-02"
+                },
+                "endereco": {
+                  "type": "string",
+                  "example": "Rua Atualizada, 123"
+                },
+                "sexo": {
+                  "type": "string",
+                  "example": "F"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Erro na validação dos dados",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "msg": {
+                        "type": "string",
+                        "example": "Mensagem de erro"
+                      },
+                      "param": {
+                        "type": "string",
+                        "example": "campo"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Usuário não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "User id not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Erro ao atualizar usuário",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Unable to update user"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
-      "get": {
-        "description": "",
+      "delete": {
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Endpoint para deletar um usuário",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Usuário deletado com sucesso"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Usuário não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "User with the given id was not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao deletar usuário",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Unable to search for user"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "description": "Endpoint para buscar um usuário pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do usuário"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Usuário buscado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Usuario Teste"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "teste@gmail.com"
+                },
+                "cpf": {
+                  "type": "string",
+                  "example": "12345678900"
+                },
+                "dataNascimento": {
+                  "type": "string",
+                  "example": "2000-01-01"
+                },
+                "endereco": {
+                  "type": "string",
+                  "example": "Rua Teste, 123"
+                },
+                "sexo": {
+                  "type": "string",
+                  "example": "M"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Usuário não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Unable to find an user with the given id"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao buscar usuário",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Unable to search for user"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
     "/local/": {
       "post": {
-        "description": "",
+        "tags": [
+          "Locais"
+        ],
+        "description": "Endpoint para criar um local",
         "parameters": [
           {
             "name": "authorization",
@@ -260,47 +686,137 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "criarLocal",
             "in": "body",
+            "description": "Dados do local",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "nome": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Local Teste"
                 },
                 "cep": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "12345-678"
                 },
                 "coordenadas": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "-23.5505,-46.6333"
                 },
                 "descricao": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Descrição do local"
                 },
                 "localidade": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Localidade Teste"
                 }
-              }
+              },
+              "required": [
+                "nome",
+                "cep"
+              ]
             }
           }
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Local criado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Local Teste"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descrição do local"
+                },
+                "cep": {
+                  "type": "string",
+                  "example": "12345-678"
+                },
+                "userId": {
+                  "type": "number",
+                  "example": 1
+                },
+                "localidade": {
+                  "type": "string",
+                  "example": "Localidade Teste"
+                },
+                "coordenadas": {
+                  "type": "string",
+                  "example": "-23.5505,-46.6333"
+                },
+                "googleMapsLink": {
+                  "type": "string",
+                  "example": "https://maps.google.com/?q=-23.5505,-46.6333"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Erro na validação dos dados",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "msg": {
+                        "type": "string",
+                        "example": "Mensagem de erro"
+                      },
+                      "param": {
+                        "type": "string",
+                        "example": "campo"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Erro ao criar local",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Error creating new location"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
       "get": {
-        "description": "",
+        "tags": [
+          "Locais"
+        ],
+        "description": "Endpoint para buscar todos os locais",
         "parameters": [
           {
             "name": "authorization",
@@ -310,37 +826,92 @@
           {
             "name": "nome",
             "in": "query",
+            "description": "Nome do local",
+            "required": false,
             "type": "string"
           },
           {
             "name": "descricao",
             "in": "query",
+            "description": "Descrição do local",
+            "required": false,
             "type": "string"
           },
           {
             "name": "localidade",
             "in": "query",
+            "description": "Localidade do local",
+            "required": false,
             "type": "string"
           },
           {
             "name": "coordenadas",
             "in": "query",
+            "description": "Coordenadas do local",
+            "required": false,
             "type": "string"
           },
           {
             "name": "cep",
             "in": "query",
+            "description": "CEP do local",
+            "required": false,
             "type": "string"
           },
           {
             "name": "googleMapsLink",
             "in": "query",
+            "description": "Link do Google Maps do local",
+            "required": false,
             "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Locais buscados com sucesso",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "nome": {
+                    "type": "string",
+                    "example": "Local Teste"
+                  },
+                  "descricao": {
+                    "type": "string",
+                    "example": "Descrição do local"
+                  },
+                  "cep": {
+                    "type": "string",
+                    "example": "12345-678"
+                  },
+                  "userId": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "localidade": {
+                    "type": "string",
+                    "example": "Localidade Teste"
+                  },
+                  "coordenadas": {
+                    "type": "string",
+                    "example": "-23.5505,-46.6333"
+                  },
+                  "googleMapsLink": {
+                    "type": "string",
+                    "example": "https://maps.google.com/?q=-23.5505,-46.6333"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -349,20 +920,36 @@
             "description": "Unauthorized"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Erro ao buscar locais",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Unable to search for locations"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
     "/local/{id}": {
       "put": {
-        "description": "",
+        "tags": [
+          "Locais"
+        ],
+        "description": "Endpoint para atualizar um local",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "ID do local"
           },
           {
             "name": "authorization",
@@ -370,28 +957,36 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "atualizarLocal",
             "in": "body",
+            "description": "Dados do local para atualizar",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "nome": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Local Atualizado"
                 },
                 "descricao": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Descrição atualizada"
                 },
                 "localidade": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Localidade Atualizada"
                 },
                 "coordenadas": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "-23.5505,-46.6333"
                 },
                 "cep": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "12345-678"
                 },
                 "googleMapsLink": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "https://maps.google.com/?q=-23.5505,-46.6333"
                 }
               }
             }
@@ -399,30 +994,122 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Local atualizado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Local Atualizado"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descrição atualizada"
+                },
+                "cep": {
+                  "type": "string",
+                  "example": "12345-678"
+                },
+                "userId": {
+                  "type": "number",
+                  "example": 1
+                },
+                "localidade": {
+                  "type": "string",
+                  "example": "Localidade Atualizada"
+                },
+                "coordenadas": {
+                  "type": "string",
+                  "example": "-23.5505,-46.6333"
+                },
+                "googleMapsLink": {
+                  "type": "string",
+                  "example": "https://maps.google.com/?q=-23.5505,-46.6333"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Erro na validação dos dados",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "msg": {
+                        "type": "string",
+                        "example": "Mensagem de erro"
+                      },
+                      "param": {
+                        "type": "string",
+                        "example": "campo"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Local não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "No location found with this id"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Erro ao atualizar local",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Unable to update location"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Locais"
+        ],
+        "description": "Endpoint para deletar um local",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "ID do local"
           },
           {
             "name": "authorization",
@@ -432,7 +1119,7 @@
         ],
         "responses": {
           "204": {
-            "description": "No Content"
+            "description": "Local deletado com sucesso"
           },
           "400": {
             "description": "Bad Request"
@@ -441,21 +1128,49 @@
             "description": "Unauthorized"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Local não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "No location found with this id"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Erro ao deletar local",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Unable to retrieve location"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
       "get": {
-        "description": "",
+        "tags": [
+          "Locais"
+        ],
+        "description": "Endpoint para buscar um local pelo ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "ID do local"
           },
           {
             "name": "authorization",
@@ -465,7 +1180,47 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Local buscado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Local Teste"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descrição do local"
+                },
+                "cep": {
+                  "type": "string",
+                  "example": "12345-678"
+                },
+                "userId": {
+                  "type": "number",
+                  "example": 1
+                },
+                "localidade": {
+                  "type": "string",
+                  "example": "Localidade Teste"
+                },
+                "coordenadas": {
+                  "type": "string",
+                  "example": "-23.5505,-46.6333"
+                },
+                "googleMapsLink": {
+                  "type": "string",
+                  "example": "https://maps.google.com/?q=-23.5505,-46.6333"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -474,23 +1229,51 @@
             "description": "Unauthorized"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Local não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "No location found with this id"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Erro ao buscar local",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Unable to search for location"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
     "/local/{id}/maps": {
       "get": {
-        "description": "",
+        "tags": [
+          "Locais"
+        ],
+        "description": "Endpoint para buscar um link do Google Maps de um local pelo ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "ID do local"
           },
           {
             "name": "authorization",
@@ -500,7 +1283,23 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Link do Google Maps buscado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "example": "Local Teste"
+                },
+                "googleMapsLink": {
+                  "type": "string",
+                  "example": "https://maps.google.com/?q=-23.5505,-46.6333"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -509,10 +1308,34 @@
             "description": "Unauthorized"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Local não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "No location found with this id"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Erro ao buscar link do Google Maps",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Unable to search for location"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }

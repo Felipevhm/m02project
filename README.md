@@ -139,8 +139,9 @@ http://localhost:3000/docs
 ## Future Improvements
 
 - Allow users to access registered places by other users, leading to a network of recycling spots.
-- Update variable names for better comprehension to english speakers.
 - Update documentation to improve user experience.
+- Update variable names for better comprehension to english speakers.
+
 
 ## Contributions
 

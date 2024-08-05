@@ -55,7 +55,7 @@ RecycleSpot API is a system developed to automate actions related to storing inf
 
     Create a `.env` file in the project root with the following content:
 
-    ```
+```
 APP_PORT=3000
 DB_DIALECT=postgres
 DB_HOST=localhost
